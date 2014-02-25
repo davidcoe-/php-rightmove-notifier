@@ -11,28 +11,30 @@ $source_html = new DOMDocument();
 
 $source_html->loadHTML($html);
 
-
-//print_r($source_html);
 echo '<textarea rows="40">';
 $all_list_items = $source_html->getElementsByTagName('li');
 
 
+$temp_dom = new DOMDocument();
 foreach($all_list_items as $single_list_item)
 {
 	//var_dump($single_list_item);
 	if ($single_list_item->getAttribute('name') === 'summary-list-item')
 	{
-		echo $single_list_item->getAttribute('name') ."<br />";
+		echo $single_list_item->getAttribute('name') ."
+		";
+		$temp_dom->appendChild($temp_dom->importNode($single_list_item,true));
 	}
 }
 
-echo "<br /> ENDEND <br />";
+echo "
+END--END";
 
 /*
 print_r($all_list_items);
 */
 
-
+/*
 $temp_dom = new DOMDocument();
 foreach($all_list_items as $n)
 {
@@ -41,8 +43,9 @@ foreach($all_list_items as $n)
 	echo "<br /> //////// <br />";
 
 }
-
+*/
 echo '</textarea>';
+
 
 
 //echo '<textarea rows="40">';
