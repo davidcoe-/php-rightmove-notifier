@@ -44,7 +44,6 @@ foreach($all_list_items as $single_list_item)
 			{
 				$house_price = $single_house_price->nodeValue;
 				echo "\n Price: ".$house_price;
-
 			}
 		}
 
