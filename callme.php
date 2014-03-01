@@ -3,6 +3,7 @@
 require_once('rightmovescrap.php');
 $scrapper = new rightmovescrap();
 $html = $scrapper->get_rightmove_listings();
+$rightmoveurl = "http://www.rightmove.com";
 
 //var_dump($html);
 echo "Hello<br />";
@@ -51,24 +52,54 @@ foreach($all_list_items as $single_list_item)
 		$domnodelist_desc = $single_list_item->getElementsByTagName('p');
 		foreach ($domnodelist_desc as $single_house_desc)
 		{
-			if(stristr($single_house_desc->nodeValue,'description'))
+			if(stristr($single_house_desc->nodeValue,'More details'))
 			{
 				$house_desc = $single_house_desc->nodeValue;
 				echo "\n Desc: ".$house_desc;
-
 			}
 		}
 
-		// get the house images
-
 		// Get the house URL
+		$i = 0;
+		$domnodelist_url = $single_list_item->getElementsByTagName('a');
+		foreach ($domnodelist_url as $single_house_url)
+		{
+			// Record just the first instance of the URL.
+			if((stristr($single_house_url->getAttribute('href'),'property-')) AND ($i < 1))
+			{
+				$house_url = $rightmoveurl.$single_house_url->getAttribute('href');
+				echo "\n URL: ".$house_url;
+				$i++;
+			}
+			
+		}
 
-		// Add the data to addition DOM for potential later use
-		$temp_dom->appendChild($temp_dom->importNode($single_list_item,true));
+		// Get the main house image
+		$domnodelist_images = $single_list_item->getElementsByTagName('img');
+		foreach ($domnodelist_images as $single_image)
+		{
+			// look for either 'largephoto' or 'fixedpic' as a classname
+			if((stristr($single_image->getAttribute('class'),'largephoto')) || (stristr($single_image->getAttribute('class'),'fixedpic')))
+			{
+				$small_house_image = $single_image->getAttribute('src');
+				$large_house_image = str_replace('214x143','656x437',$small_house_image);	
+				echo "\n IMAGE: ".$large_house_image;
+			}
+		}
+
+		// Add the data to addition DOM for potential later use aswell as debugging.
+		//$temp_dom->appendChild($temp_dom->importNode($single_list_item,true));
+
+
+		$house_results[] = array(
+			'title' => $house_title,
+			'price' => $house_price,
+			'description' => $house_desc,
+			'url' => $house_url,
+			'image' => $large_house_image
+		);
 
 	}
-
-
 
 }
 
@@ -76,19 +107,16 @@ foreach($all_list_items as $single_list_item)
 
 echo "
 
+END--END
 
-END--END";
-
-
-//$xml = simplexml_load_string($html); 
-//$myresult = $xml->xpath("//li"); 
-//echo $myresult[0]->asXml();
+</textarea>";
 
 
+echo "<pre>";
+var_dump($house_results);
+echo "</pre>";
 
-echo '</textarea>';
 
-//echo '<textarea rows="40">';
-print_r($temp_dom->saveHTML());
-//echo '</textarea>';
+// Debugging
+//print_r($temp_dom->saveHTML());
 ?>
