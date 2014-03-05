@@ -14,7 +14,7 @@ Update the config variables to match you requirements
 
 ```php
 $rightmove_url	= "Rightmove Website Search Address you want to track. (sorted by newest first)";
-$file_location	= "Default is the location this script is called, file name "houses_found.csv";
+$file_location	= "Default is the location this script is called, file name houses_found.csv;
 $from			= "Email address you want the script to send from";
 $to				= "Email address you want the script to send new houses too";
 end
