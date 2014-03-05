@@ -16,7 +16,7 @@ class Rightmovescrap
 
 		// Place the html into a DOM Document to we can find the ol node and it's contents
 		$scrapped_html_dom = new DOMDocument();
-		$scrapped_html_dom->loadHTML($scrapped_website);
+		@$scrapped_html_dom->loadHTML($scrapped_website);
 		$raw_houses_list = $scrapped_html_dom->getElementsByTagName('ol');
 
 		// getElementsByTagName returns a DOMNodeList which is rubbish for getting strings
@@ -32,7 +32,7 @@ class Rightmovescrap
 		$temp_dom = new DOMDocument();
 
 		$source_html = new DOMDocument();
-		$source_html->loadHTML($html);
+		@$source_html->loadHTML($html);
 
 		$all_list_items = $source_html->getElementsByTagName('li');
 

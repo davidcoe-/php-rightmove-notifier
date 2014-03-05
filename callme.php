@@ -6,10 +6,15 @@
 
 <?php
 
-$rightmove_url = 'http://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E347&insId=2&radius=0.0&displayPropertyType=&minBedrooms=&maxBedrooms=&minPrice=&maxPrice=&retirement=&partBuyPartRent=&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false';
-$file_location = $_SERVER['DOCUMENT_ROOT'] .'/houses_found.csv';
-$from = '';
-$to = '';
+// Please change these values to match your requirements
+$rightmove_url = 'http://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E347&insId=2&radius=0.0&displayPropertyType=&minBedrooms=&maxBedrooms=&minPrice=&maxPrice=&retirement=&partBuyPartRent=&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false'; // The exact search URL that you wish to replicate and repeat
+$file_location = getcwd() .'/houses_found.csv'; // The location of the file house ids are saved to for future reference. This stops the script sending you the same houses each time it runs
+$from = 'example@example.com'; // The email address the email will come from
+$to = 'example@example.com'; // The email address the email will got too
+
+/** **********************************************************************************
+	Start the 
+********************************************************************************** **/
 
 require_once('rightmovescrap.php');
 $houses_raw_html = new rightmovescrap();
@@ -37,8 +42,14 @@ if (file_exists($file_location))
 	}
 
 } else {
-
+	//Create File
+	echo "Error finding file";
+	file_put_contents($file_location, '');
 }
+
+if(empty($all_houses))
+	echo "No new houses found";
+
 
 // Save all new record
 if (!empty($ids_to_record))
@@ -46,24 +57,14 @@ if (!empty($ids_to_record))
 	file_put_contents($file_location, $ids_to_record);
 }
 
-
-echo "<pre>";
-var_dump($email_list);
-echo "</pre>";
-
 // Email the message
 if (!empty($email_list)) {
 	$email_list_count = count($email_list);
 
 	$subject = $email_list_count.'x New Property Found';
-	$headers = "From: " . $from . "\r\n";
-	$headers .= "Reply-To: ". $from . "\r\n";
-	$headers .= "MIME-Version: 1.0\r\n";
-	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-	$message = '<html><body>';
-	$message = '<style>a {color: #A10E8B;} a:visited {color: #bbbbbb;}</style>';
-	$message = '<style>a {color: #A10E8B;} a:visited {color: #bbbbbb;}</style>';
-	$message .= '<h1>Hello,</h1>';
+	$message .= '
+		<html>
+		<body><h1>Hello,</h1>';
 
 	foreach ($email_list as $house) {
 		$message .= '
@@ -74,19 +75,27 @@ if (!empty($email_list)) {
 		<a style="font-size: 30px;" href="'. $house['url'] .'">
 		<img src="'.$house['image'].'" width="100%" alt="'. $house['title'] .'" /> <br /><br />'
 		. $house['url'] . '</a>;
-
+		<br /><br /><hr /><br /><br />
 		';
 	}
 
 	$message .= '</body></html>';
+	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset="UTF-8"' . "\r\n";
+	$headers .= 'To: Me <$to>' . "\r\n";
+	$headers .= 'From: Rightmove Scrapper <$from>' . "\r\n";
 
-	if(mail($to, $subject, $message, $headers))
-		echo "Email Sent";
-
+	if(mail($to, $subject, $message, $headers)) // Send the Email
+	{
+		echo "Email Sent - $email_list_count property found";
+	} else {
+		echo "Email not sent";
+	}
 }
 
-?>
+echo "\n Finished with no errors";
 
+?>
 
 </body>
 </html>
