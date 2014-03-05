@@ -7,7 +7,7 @@
 <?php
 
 // Please change these values to match your requirements
-$rightmove_url = 'http://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E347&insId=2&radius=0.0&displayPropertyType=&minBedrooms=&maxBedrooms=&minPrice=&maxPrice=&retirement=&partBuyPartRent=&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false'; // The exact search URL that you wish to replicate and repeat
+$rightmove_url = 'http://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E87490&insId=2&radius=1.0&displayPropertyType=&minBedrooms=&maxBedrooms=&minPrice=200000&maxPrice=400000&retirement=&partBuyPartRent=&maxDaysSinceAdded=&includeSSTC=true&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false'; // The exact search URL that you wish to replicate and repeat
 $file_location = getcwd() .'/houses_found.csv'; // The location of the file house ids are saved to for future reference. This stops the script sending you the same houses each time it runs
 $from = 'example@example.com'; // The email address the email will come from
 $to = 'example@example.com'; // The email address the email will got too
